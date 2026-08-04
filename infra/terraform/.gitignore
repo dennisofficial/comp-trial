@@ -1,0 +1,35 @@
+# Terraform state files
+*.tfstate
+*.tfstate.*
+
+# Crash log files
+crash.log
+crash.*.log
+
+# Terraform lock files commit; uncomment to ignore if a team prefers floating versions
+# .terraform.lock.hcl
+
+# Terraform working directory
+.terraform/
+
+# Local Terraform credentials and environment
+.credentials/
+.env
+.env.*
+!.env.example
+!.env.*.enc
+.env.keys
+
+# Sensitive variable files
+*.tfvars
+!*.tfvars.example
+
+# Override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# CLI configuration files
+.terraformrc
+terraform.rc
