@@ -1,0 +1,11 @@
+/// Deploy smoke-test model. Proves the app can read and write Postgres in production
+/// before any real feature exists. Delete once the spec's real data model lands.
+model Ping {
+  id        String   @id @default(dbgenerated("generate_prefixed_cuid('png'::text)"))
+  note      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([createdAt])
+  @@map("ping")
+}
