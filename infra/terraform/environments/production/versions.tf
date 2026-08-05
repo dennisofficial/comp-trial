@@ -10,5 +10,9 @@ terraform {
       source  = "vercel/vercel"
       version = "~> 3.16"
     }
+    digitalocean = {
+      source  = "digitalocean/digitalocean"
+      version = "~> 2.99"
+    }
   }
 }

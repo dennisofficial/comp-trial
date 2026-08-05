@@ -15,6 +15,8 @@ resource "cloudflare_dns_record" "app" {
   content = var.vercel_cname_target
   ttl     = var.cloudflare_dns_ttl
 
+  # Never proxy: Cloudflare's cert would sit in front of the origin's and ACME
+  # validation would never complete.
   proxied = false
 
   comment = "Managed by Terraform for comp-trial."
