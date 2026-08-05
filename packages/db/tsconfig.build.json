@@ -1,0 +1,30 @@
+{
+  // Emits runnable JS for consumers that are not bundlers.
+  //
+  // Next transpiles this package from source, but the NestJS API runs on plain
+  // Node — it cannot execute a .ts file, and the generated Prisma client is
+  // TypeScript. Comp's own db package solves this by side-generating a legacy
+  // prisma-client-js into node_modules; compiling the package we already have is
+  // the same outcome with one build step and no temp-directory shuffling.
+  //
+  // CommonJS because Nest's compiled output is CommonJS. moduleResolution "node"
+  // (not NodeNext) because the generated client uses extensionless relative
+  // imports, which NodeNext rejects.
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "declaration": false,
+    "sourceMap": true,
+    "types": ["node"]
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist", "**/*.test.ts"]
+}

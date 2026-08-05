@@ -5,14 +5,24 @@ dist/
 out/
 build/
 
-# env — never commit
+# env — dotenvx. The encrypted `.env.*.enc` files are committed on purpose (only the
+# values are ciphertext; the keys stay readable in a diff). Everything that can
+# decrypt them, or that holds plaintext, never leaves the machine.
 .env
 .env.*
 !.env.example
+!.env.*.enc
+.env.keys
+.env.personal
 
 # prisma generated client
 packages/db/generated/
 packages/db/src/generated/
+
+# claude code — personal settings and local state. Everything else under .claude/
+# is shared on purpose: skills are committed, see CLAUDE.md.
+.claude/settings.local.json
+.claude/projects/
 
 # os / editor
 .DS_Store

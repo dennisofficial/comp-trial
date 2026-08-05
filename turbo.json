@@ -1,11 +1,23 @@
 {
   "$schema": "https://turborepo.org/schema.json",
-  "globalEnv": ["DATABASE_URL", "NODE_ENV"],
+  "globalEnv": [
+    "DATABASE_URL",
+    "DIRECT_URL",
+    "NODE_ENV",
+    "PORT",
+    "CORS_ALLOWED_ORIGINS",
+    "SENTRY_DSN",
+    "NEXT_PUBLIC_SENTRY_DSN",
+    "VERCEL_ENV",
+    "NEXT_PUBLIC_VERCEL_ENV"
+  ],
+  "globalDependencies": ["**/.env.local.enc"],
   "tasks": {
     "db:generate": { "cache": false },
     "build": {
       "dependsOn": ["^build", "db:generate"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"],
+      "env": ["SENTRY_AUTH_TOKEN", "VERCEL_GIT_COMMIT_SHA", "CI"]
     },
     "dev": { "cache": false, "persistent": true },
     "typecheck": { "dependsOn": ["^build", "db:generate"] },

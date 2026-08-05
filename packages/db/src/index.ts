@@ -16,8 +16,7 @@ const createPrismaClient = () => {
   });
 };
 
-// Next.js dev server hot-reloads modules; without this the process leaks a new
-// pool on every reload until Postgres refuses connections.
+// Hot reload re-evaluates this module, leaking a pool per reload without the global.
 const globalForPrisma = globalThis as unknown as {
   prisma?: ReturnType<typeof createPrismaClient>;
 };

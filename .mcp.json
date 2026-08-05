@@ -1,0 +1,26 @@
+{
+  "mcpServers": {
+    "prisma": {
+      "command": "sh",
+      "args": ["-c", "cd packages/db && npx -y prisma@7 mcp"]
+    },
+    "sentry": {
+      "type": "http",
+      "url": "https://mcp.sentry.dev/mcp"
+    },
+    "digitalocean": {
+      "type": "http",
+      "url": "https://apps.mcp.digitalocean.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${DIGITALOCEAN_API_TOKEN}"
+      }
+    },
+    "posthog": {
+      "type": "http",
+      "url": "https://mcp.posthog.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${POSTHOG_PERSONAL_API_KEY}"
+      }
+    }
+  }
+}
