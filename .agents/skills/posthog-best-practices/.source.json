@@ -1,0 +1,7 @@
+{
+  "source": "PostHog/context-mill",
+  "sourceType": "github-release-asset",
+  "release": "v1.42.1",
+  "asset": "posthog-best-practices.zip",
+  "sha256": "aa056775c1716101b40b031aa139fdd6bef4534999bc93f448760e5b7224af88"
+}
