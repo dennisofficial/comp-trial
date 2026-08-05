@@ -11,6 +11,26 @@ concurrency:
 
 jobs:
   check:
+    name: ${{ matrix.task }}
+    runs-on: ubuntu-latest
+    strategy:
+      # Report every check independently — a lint failure must not hide a broken test.
+      fail-fast: false
+      matrix:
+        task: [typecheck, test, lint]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
+
+      - run: bun install --frozen-lockfile
+
+      - run: bun run ${{ matrix.task }}
+
+  contract:
+    name: openapi contract
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,13 +41,9 @@ jobs:
 
       - run: bun install --frozen-lockfile
 
-      - run: bun run typecheck
+      - run: bunx turbo run build --filter=@repo/db
 
-      - run: bun run test
-
-      - run: bun run lint
-
-      - name: openapi contract is in sync
+      - name: regenerate and diff
         env:
           DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
         run: |

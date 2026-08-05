@@ -21,7 +21,9 @@
           }
         },
         "summary": "Liveness plus a database round-trip",
-        "tags": ["health"]
+        "tags": [
+          "health"
+        ]
       }
     },
     "/v1/pings": {
@@ -41,7 +43,9 @@
           }
         },
         "summary": "List the most recent pings",
-        "tags": ["pings"]
+        "tags": [
+          "pings"
+        ]
       },
       "post": {
         "operationId": "createPing",
@@ -72,7 +76,9 @@
           }
         },
         "summary": "Record a ping",
-        "tags": ["pings"]
+        "tags": [
+          "pings"
+        ]
       }
     }
   },
@@ -100,14 +106,21 @@
         "properties": {
           "status": {
             "type": "string",
-            "enum": ["ok"]
+            "enum": [
+              "ok"
+            ]
           },
           "database": {
             "type": "string",
-            "enum": ["reachable"]
+            "enum": [
+              "reachable"
+            ]
           }
         },
-        "required": ["status", "database"]
+        "required": [
+          "status",
+          "database"
+        ]
       },
       "PingDto": {
         "type": "object",
@@ -127,7 +140,11 @@
             "example": "2026-08-04T12:00:00.000Z"
           }
         },
-        "required": ["id", "note", "createdAt"]
+        "required": [
+          "id",
+          "note",
+          "createdAt"
+        ]
       },
       "PingListResponseDto": {
         "type": "object",
@@ -139,7 +156,9 @@
             }
           }
         },
-        "required": ["data"]
+        "required": [
+          "data"
+        ]
       },
       "CreatePingDto": {
         "type": "object",
@@ -151,7 +170,9 @@
             "example": "shipped the API split"
           }
         },
-        "required": ["note"]
+        "required": [
+          "note"
+        ]
       },
       "PingResponseDto": {
         "type": "object",
@@ -160,7 +181,9 @@
             "$ref": "#/components/schemas/PingDto"
           }
         },
-        "required": ["data"]
+        "required": [
+          "data"
+        ]
       }
     }
   }

@@ -9,6 +9,7 @@
     "dev": "bun run env:inject -- nest start --watch",
     "typecheck": "tsc --noEmit",
     "openapi:generate": "nest build && bun run env:inject -- node dist/openapi/generate-spec.js",
+    "openapi:generate:ci": "nest build && node dist/openapi/generate-spec.js",
     "openapi:check": "bun run openapi:generate && git diff --exit-code -- openapi.json",
     "test": "vitest run --passWithNoTests",
     "lint": "eslint src",
