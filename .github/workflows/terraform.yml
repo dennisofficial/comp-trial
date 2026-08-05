@@ -1,0 +1,37 @@
+name: Terraform
+
+on:
+  pull_request:
+    paths: ['infra/**', '.github/workflows/terraform.yml']
+  push:
+    branches: [main]
+    paths: ['infra/**', '.github/workflows/terraform.yml']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: terraform-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.14.3
+          terraform_wrapper: false
+
+      - run: terraform fmt -check -recursive -diff
+        working-directory: infra/terraform
+
+      # -backend=false keeps this credential-free and state-free, which is what makes
+      # it safe to run on a public repo where Actions logs are world-readable.
+      - run: terraform init -backend=false -input=false
+        working-directory: infra/terraform/environments/production
+
+      - run: terraform validate
+        working-directory: infra/terraform/environments/production
