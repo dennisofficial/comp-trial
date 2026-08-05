@@ -13,13 +13,13 @@ Below are best practices that apply across PostHog products.
 If the project is using a specific PostHog product, also consult that product's specific best-practice reference files in addition to this general guidance. Use the criteria below to determine if there are potential implementation issues that should be addressed, consult the relevant docs to suggest a solution, and point out the issue with reference docs when unsure.
 
 If the project uses a specific PostHog product mentioned below, consult the relevant reference file for more specific guidance **after** following the general guidance below.
+
 - If the project uses PostHog product analytics, also consult `references/product-analytics.md`.
 - If the project uses Error Tracking, also consult `references/error-tracking.md`.
 - If the project uses Experiments, also consult `references/experiments.md`.
 - If the project uses Feature Flags, also consult `references/feature-flags.md`.
 - If the project uses Session Replay, also consult `references/session-replay.md`.
 - If you are running an audit skill (anything that produces a findings report), also consult `references/investigation-standards.md` for the provenance, evidence, and adversarial-review standards that apply to every audit finding.
-
 
 ## Reference files
 

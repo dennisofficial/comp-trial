@@ -26,3 +26,12 @@ jobs:
       - run: bun run test
 
       - run: bun run lint
+
+      - name: openapi contract is in sync
+        env:
+          DATABASE_URL: postgresql://ci:ci@localhost:5432/ci
+        run: |
+          bun run --cwd apps/api openapi:generate:ci
+          bun run --cwd apps/web openapi:codegen
+          git add -N apps/api/openapi.json apps/web/src/store/generated
+          git diff --exit-code -- apps/api/openapi.json apps/web/src/store/generated

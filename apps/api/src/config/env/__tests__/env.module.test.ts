@@ -1,28 +1,15 @@
 import { Test } from '@nestjs/testing';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 
 import { EnvModule } from '../env.module';
 import { EnvService } from '../env.service';
 
-const buildEnv = async () => {
-  const moduleRef = await Test.createTestingModule({ imports: [EnvModule] }).compile();
+const buildEnv = async ({ validate }: { validate: boolean }) => {
+  const moduleRef = await Test.createTestingModule({
+    imports: [EnvModule.forRoot({ validate })],
+  }).compile();
 
   return moduleRef.get(EnvService);
-};
-
-// EnvModule reads NODE_ENV at import time, so the validated path needs a fresh import.
-const buildValidatedEnv = async () => {
-  vi.resetModules();
-  process.env.NODE_ENV = 'development';
-
-  const [{ EnvModule: FreshEnvModule }, { EnvService: FreshEnvService }] = await Promise.all([
-    import('../env.module'),
-    import('../env.service'),
-  ]);
-
-  const moduleRef = await Test.createTestingModule({ imports: [FreshEnvModule] }).compile();
-
-  return moduleRef.get(FreshEnvService);
 };
 
 describe('EnvModule', () => {
@@ -30,22 +17,21 @@ describe('EnvModule', () => {
 
   afterEach(() => {
     process.env = { ...original };
-    vi.resetModules();
   });
 
   it('exports EnvService so main.ts can resolve it off the app container', async () => {
     process.env.DATABASE_URL = 'postgresql://u:p@localhost:5432/db';
 
-    const env = await buildEnv();
+    const env = await buildEnv({ validate: true });
 
     expect(env).toBeInstanceOf(EnvService);
     expect(env.get('DATABASE_URL')).toBe('postgresql://u:p@localhost:5432/db');
   });
 
-  it('boots without a validated environment under NODE_ENV=test', async () => {
+  it('boots without a validated environment when the caller opts out', async () => {
     delete process.env.DATABASE_URL;
 
-    await expect(buildEnv()).resolves.toBeInstanceOf(EnvService);
+    await expect(buildEnv({ validate: false })).resolves.toBeInstanceOf(EnvService);
   });
 
   it('serves the validated value, not the raw process.env string', async () => {
@@ -53,7 +39,7 @@ describe('EnvModule', () => {
     process.env.PORT = '3001';
     process.env.CORS_ALLOWED_ORIGINS = 'https://a.example.com, https://b.example.com';
 
-    const env = await buildValidatedEnv();
+    const env = await buildEnv({ validate: true });
 
     expect(env.get('PORT')).toBe(3001);
     expect(env.get('CORS_ALLOWED_ORIGINS')).toEqual([
@@ -67,15 +53,15 @@ describe('EnvModule', () => {
     delete process.env.PORT;
     delete process.env.CORS_ALLOWED_ORIGINS;
 
-    const env = await buildValidatedEnv();
+    const env = await buildEnv({ validate: true });
 
-    expect(env.get('PORT')).toBe(8080);
+    expect(env.get('PORT')).toBe(4000);
     expect(env.get('CORS_ALLOWED_ORIGINS')).toEqual([]);
   });
 
   it('refuses to compile when a required variable is missing', async () => {
     delete process.env.DATABASE_URL;
 
-    await expect(buildValidatedEnv()).rejects.toThrow(/DATABASE_URL/);
+    await expect(buildEnv({ validate: true })).rejects.toThrow(/DATABASE_URL/);
   });
 });

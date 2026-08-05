@@ -4,3 +4,8 @@ node_modules
 dist
 bun.lock
 packages/db/src/generated
+
+# Generated artifacts belong to their generator. Formatting them makes `openapi:check`
+# fail forever: it diffs the raw generator output against a prettier-rewritten copy.
+apps/api/openapi.json
+apps/web/src/store/generated

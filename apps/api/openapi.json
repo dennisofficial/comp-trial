@@ -1,0 +1,167 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/v1/health": {
+      "get": {
+        "operationId": "checkHealth",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthReportDto"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "The database did not answer"
+          }
+        },
+        "summary": "Liveness plus a database round-trip",
+        "tags": ["health"]
+      }
+    },
+    "/v1/pings": {
+      "get": {
+        "operationId": "listPings",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PingListResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "summary": "List the most recent pings",
+        "tags": ["pings"]
+      },
+      "post": {
+        "operationId": "createPing",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PingResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The note is missing, blank, or over 280 characters"
+          }
+        },
+        "summary": "Record a ping",
+        "tags": ["pings"]
+      }
+    }
+  },
+  "info": {
+    "title": "comp-trial API",
+    "description": "The only backend. apps/web consumes this through a generated RTK Query client.",
+    "version": "1",
+    "contact": {}
+  },
+  "tags": [
+    {
+      "name": "health",
+      "description": ""
+    },
+    {
+      "name": "pings",
+      "description": ""
+    }
+  ],
+  "servers": [],
+  "components": {
+    "schemas": {
+      "HealthReportDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["ok"]
+          },
+          "database": {
+            "type": "string",
+            "enum": ["reachable"]
+          }
+        },
+        "required": ["status", "database"]
+      },
+      "PingDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "png_cm3xk1a2b0000"
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 280,
+            "example": "shipped the API split"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2026-08-04T12:00:00.000Z"
+          }
+        },
+        "required": ["id", "note", "createdAt"]
+      },
+      "PingListResponseDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PingDto"
+            }
+          }
+        },
+        "required": ["data"]
+      },
+      "CreatePingDto": {
+        "type": "object",
+        "properties": {
+          "note": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 280,
+            "example": "shipped the API split"
+          }
+        },
+        "required": ["note"]
+      },
+      "PingResponseDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/PingDto"
+          }
+        },
+        "required": ["data"]
+      }
+    }
+  }
+}

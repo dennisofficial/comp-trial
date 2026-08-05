@@ -11,12 +11,14 @@ Wrong findings in customer-facing audits erode trust and cause rework. The stand
 Every non-`pass` finding must cite the exact file path, line number(s), and a short code snippet (or equivalent search-result evidence). This is enforced by the ledger schema — `audit_resolve_checks` requires a `file` field for non-skip findings — but the standard goes further than the schema.
 
 **What counts as provenance:**
+
 - File path + line number + code snippet showing the behavior.
 - Grep / search results showing presence or absence of a pattern.
 - Package.json / lock-file entries for version claims.
 - Config-file values for configuration claims.
 
 **What does NOT count:**
+
 - "PostHog is likely configured with…" (inference from docs).
 - "Based on the framework, it probably…" (assumption from conventions).
 - "The codebase appears to…" (hedge language without evidence).

@@ -1,42 +1,40 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
+import posthog from 'posthog-js';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { createPingSchema, type CreatePingInput } from '@/server/validators/ping';
+import { createPingSchema, type CreatePingInput } from '@/lib/validators/ping';
+import { useCreatePingMutation } from '@/store/api';
 
 export function PingForm() {
-  const router = useRouter();
+  const [createPing, { isLoading }] = useCreatePingMutation();
 
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<CreatePingInput>({
     resolver: zodResolver(createPingSchema),
     defaultValues: { note: '' },
   });
 
   const handleCreate = handleSubmit(async (values) => {
-    const response = await fetch('/api/pings', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(values),
-    });
+    const result = await createPing({ createPingDto: values });
 
-    if (!response.ok) {
-      toast.error('Could not save that. Check the server logs.');
+    if (result.error) {
+      toast.error('Could not save that. Check the API logs.');
       return;
     }
 
+    posthog.capture('ping_created', { note_length: values.note.length });
+
     reset();
-    router.refresh();
     toast.success('Saved.');
   });
 
@@ -57,8 +55,8 @@ export function PingForm() {
         ) : null}
       </div>
 
-      <Button type="submit" disabled={isSubmitting} className="self-start">
-        {isSubmitting ? 'Saving…' : 'Save'}
+      <Button type="submit" disabled={isLoading} className="self-start">
+        {isLoading ? 'Saving…' : 'Save'}
       </Button>
     </form>
   );

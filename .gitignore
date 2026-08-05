@@ -5,9 +5,7 @@ dist/
 out/
 build/
 
-# env — dotenvx. The encrypted `.env.*.enc` files are committed on purpose (only the
-# values are ciphertext; the keys stay readable in a diff). Everything that can
-# decrypt them, or that holds plaintext, never leaves the machine.
+# env — dotenvx.
 .env
 .env.*
 !.env.example
@@ -30,3 +28,5 @@ packages/db/src/generated/
 .vercel
 coverage/
 *.tsbuildinfo
+
+.playwright-cli/

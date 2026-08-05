@@ -24,9 +24,9 @@ You could then break down your `upgrade_purchased` event by those properties.
 
 We also automatically apply some properties to events, such as:
 
--   the `Browser` used to trigger an event.
--   the `Current URL` where an event occurred.
--   or the `Device Type` used.
+- the `Browser` used to trigger an event.
+- the `Current URL` where an event occurred.
+- or the `Device Type` used.
 
 ## Sessions
 
@@ -56,10 +56,10 @@ Users of your product are given a **[person profile](/docs/data/persons.md)**, w
 
 Person profiles similarly contain properties. Some are set automatically, such as:
 
--   Browser details
--   Geo IP data
--   Referrers
--   UTM values
+- Browser details
+- Geo IP data
+- Referrers
+- UTM values
 
 You can also set your own properties on person profiles, which will appear in reports and data tables.
 
@@ -71,15 +71,15 @@ You might see a few identifiers on each profile: anonymous IDs created before a 
 
 **Further reading**
 
--   [How data is stored in ClickHouse](/docs/how-posthog-works/clickhouse.md)
--   [How person properties are added to events](/docs/how-posthog-works/ingestion-pipeline.md#2-person-processing)
+- [How data is stored in ClickHouse](/docs/how-posthog-works/clickhouse.md)
+- [How person properties are added to events](/docs/how-posthog-works/ingestion-pipeline.md#2-person-processing)
 
 ## Cohorts and groups
 
 There are two ways to analyze collections of users in PostHog:
 
--   Cohorts – Dynamic or static lists of users based on shared properties
--   Groups – An aggregate of events captured from a group of users (e.g. a company)
+- Cohorts – Dynamic or static lists of users based on shared properties
+- Groups – An aggregate of events captured from a group of users (e.g. a company)
 
 ### Cohorts
 
@@ -91,15 +91,15 @@ Your cohort would then show you a periodically-updated listing of your paid cust
 
 You could then use this cohort in other parts of PostHog, such as:
 
--   In trends, funnels, retention, user paths, stickiness, and lifecycle insights
--   As a filter on any product analytics dashboard
--   To target feature flags, experiments, and user surveys
--   To filter the session replay list and create playlists
--   Filter live events on the **Activity** page
+- In trends, funnels, retention, user paths, stickiness, and lifecycle insights
+- As a filter on any product analytics dashboard
+- To target feature flags, experiments, and user surveys
+- To filter the session replay list and create playlists
+- Filter live events on the **Activity** page
 
 ### Groups
 
-Alternatively, you might want to understand *group behavior*. By defining **[groups](/docs/product-analytics/group-analytics.md)**, you can see a cross-section of events across multiple person profiles.
+Alternatively, you might want to understand _group behavior_. By defining **[groups](/docs/product-analytics/group-analytics.md)**, you can see a cross-section of events across multiple person profiles.
 
 This can be helpful if you're selling to companies with multiple individual users, and want to understand the overall behavior of the whole company that uses your product.
 

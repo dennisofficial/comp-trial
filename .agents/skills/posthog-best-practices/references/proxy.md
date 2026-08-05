@@ -29,7 +29,6 @@ If you're onboarding a web-based product like Web Analytics, Surveys, or AI Obse
 1.  1
 
     ## Create your proxy
-
     1.  Go to [organization proxy settings](https://app.posthog.com/settings/organization-proxy)
     2.  Click **new managed proxy**
     3.  Enter a subdomain you control. For example, if your app runs on `myapp.com`, use `yoursubdomain.myapp.com`
@@ -73,18 +72,18 @@ If you're onboarding a web-based product like Web Analytics, Surveys, or AI Obse
     ### US
 
     ```javascript
-    posthog.init("<ph_project_token>", {
-      api_host: "https://yoursubdomain.myapp.com",
-      ui_host: "https://us.posthog.com",
+    posthog.init('<ph_project_token>', {
+      api_host: 'https://yoursubdomain.myapp.com',
+      ui_host: 'https://us.posthog.com',
     });
     ```
 
     ### EU
 
     ```javascript
-    posthog.init("<ph_project_token>", {
-      api_host: "https://yoursubdomain.myapp.com",
-      ui_host: "https://eu.posthog.com",
+    posthog.init('<ph_project_token>', {
+      api_host: 'https://yoursubdomain.myapp.com',
+      ui_host: 'https://eu.posthog.com',
     });
     ```
 
@@ -118,12 +117,12 @@ If your proxy is stuck in **issuing** or shows as **erroring**, use the built-in
 
 The diagnostic runs these checks:
 
--   **DNS CNAME** – Verifies your CNAME record points to the correct PostHog proxy target
--   **Certificate status** – Checks if SSL certificate provisioning is progressing normally
--   **CAA records** – Scans your DNS tree for CAA records that might block certificate issuance
--   **HTTP-01 challenge** – Tests if the domain verification endpoint is reachable
--   **Live event probe** – Confirms events can flow through the proxy
--   **Certificate expiry** – Warns if an active certificate is expiring soon
+- **DNS CNAME** – Verifies your CNAME record points to the correct PostHog proxy target
+- **Certificate status** – Checks if SSL certificate provisioning is progressing normally
+- **CAA records** – Scans your DNS tree for CAA records that might block certificate issuance
+- **HTTP-01 challenge** – Tests if the domain verification endpoint is reachable
+- **Live event probe** – Confirms events can flow through the proxy
+- **Certificate expiry** – Warns if an active certificate is expiring soon
 
 Each check shows a status (passed, warning, failed, or skipped) with details and remediation steps when needed.
 
@@ -141,9 +140,9 @@ Your domain has CAA records that don't authorize PostHog's certificate authority
 
 The domain verification URL isn't accessible. Make sure:
 
--   Port 80 is open and not blocked by a firewall
--   No redirects from HTTP to HTTPS on the verification path
--   No other CDN or proxy is intercepting traffic before it reaches PostHog
+- Port 80 is open and not blocked by a firewall
+- No redirects from HTTP to HTTPS on the verification path
+- No other CDN or proxy is intercepting traffic before it reaches PostHog
 
 **DNS provider proxy enabled**
 
@@ -167,16 +166,16 @@ For most users with Cloudflare Enterprise, option 1 (setting up your own Cloudfl
 
 Not strictly guaranteed, but in practice this is usually the case. Cloudflare uses [anycast routing](https://developers.cloudflare.com/support/troubleshooting/general-troubleshooting/geographic-traffic-routing/) to terminate connections at the data center closest to the end user, so requests from users in Europe almost always land on EU edges. There are two caveats:
 
--   If your user is physically outside Europe, their request will terminate at a non-EU edge.
--   If the nearest Cloudflare data center is overloaded or unavailable, traffic may be routed to another region.
+- If your user is physically outside Europe, their request will terminate at a non-EU edge.
+- If the nearest Cloudflare data center is overloaded or unavailable, traffic may be routed to another region.
 
 We do not enable [Regional Services or the Data Localization Suite](https://developers.cloudflare.com/data-localization/) on the managed reverse proxy, so EU-only edge termination is not contractually enforced.
 
 That said, the managed reverse proxy is designed so that **no request content is stored at the edge**, regardless of which data center terminates the connection:
 
--   The Cloudflare Workers we use to forward traffic to our ingestion pipeline do not log requests.
--   Request caching is not enabled.
--   Cloudflare has confirmed to us that they do not retain request logs for this traffic either.
+- The Cloudflare Workers we use to forward traffic to our ingestion pipeline do not log requests.
+- Request caching is not enabled.
+- Cloudflare has confirmed to us that they do not retain request logs for this traffic either.
 
 Once traffic reaches PostHog, it is ingested into the region you selected (EU or US Cloud). If strict EU-only termination at the edge is a hard requirement for your compliance posture, we recommend setting up a [self-hosted proxy](/docs/advanced/proxy.md) on infrastructure you control instead.
 
@@ -198,35 +197,35 @@ Proxied traffic – events, session recordings, feature flags, and SDK assets �
 
 Choose your platform and follow the setup guide:
 
--   [![](https://res.cloudinary.com/dmukukwp6/image/upload/Cloud_Front_76c0f62ab5.svg)AWS CloudFront](/docs/advanced/proxy/cloudfront.md)
+- [![](https://res.cloudinary.com/dmukukwp6/image/upload/Cloud_Front_76c0f62ab5.svg)AWS CloudFront](/docs/advanced/proxy/cloudfront.md)
 
--   [![](https://res.cloudinary.com/dmukukwp6/image/upload/caddy_c78a5a013f.svg)Caddy](/docs/advanced/proxy/caddy.md)
+- [![](https://res.cloudinary.com/dmukukwp6/image/upload/caddy_c78a5a013f.svg)Caddy](/docs/advanced/proxy/caddy.md)
 
--   [![](https://res.cloudinary.com/dmukukwp6/image/upload/cloudflare_icon_ef34353f85.svg)Cloudflare](/docs/advanced/proxy/cloudflare.md)
+- [![](https://res.cloudinary.com/dmukukwp6/image/upload/cloudflare_icon_ef34353f85.svg)Cloudflare](/docs/advanced/proxy/cloudflare.md)
 
--   [![](https://res.cloudinary.com/dmukukwp6/image/upload/kubernetes_svgrepo_com_b9716be409.svg)Kubernetes](/docs/advanced/proxy/kubernetes-ingress-controller.md)
+- [![](https://res.cloudinary.com/dmukukwp6/image/upload/kubernetes_svgrepo_com_b9716be409.svg)Kubernetes](/docs/advanced/proxy/kubernetes-ingress-controller.md)
 
--   [![](https://res.cloudinary.com/dmukukwp6/image/upload/netlify_original_cdea69c2b5.svg)Netlify](/docs/advanced/proxy/netlify.md)
+- [![](https://res.cloudinary.com/dmukukwp6/image/upload/netlify_original_cdea69c2b5.svg)Netlify](/docs/advanced/proxy/netlify.md)
 
--   [![](https://res.cloudinary.com/dmukukwp6/image/upload/posthog.com/contents/images/docs/integrate/frameworks/nextjs.svg)Next.js rewrites](/docs/advanced/proxy/nextjs.md)
+- [![](https://res.cloudinary.com/dmukukwp6/image/upload/posthog.com/contents/images/docs/integrate/frameworks/nextjs.svg)Next.js rewrites](/docs/advanced/proxy/nextjs.md)
 
--   [![](https://res.cloudinary.com/dmukukwp6/image/upload/posthog.com/contents/images/docs/integrate/frameworks/nextjs.svg)Next.js proxy file](/docs/advanced/proxy/nextjs-middleware.md)
+- [![](https://res.cloudinary.com/dmukukwp6/image/upload/posthog.com/contents/images/docs/integrate/frameworks/nextjs.svg)Next.js proxy file](/docs/advanced/proxy/nextjs-middleware.md)
 
--   [![](https://res.cloudinary.com/dmukukwp6/image/upload/nginx_icon_872690f0fe.svg)nginx](/docs/advanced/proxy/nginx.md)
+- [![](https://res.cloudinary.com/dmukukwp6/image/upload/nginx_icon_872690f0fe.svg)nginx](/docs/advanced/proxy/nginx.md)
 
--   [![](https://res.cloudinary.com/dmukukwp6/image/upload/posthog.com/contents/images/docs/integrate/nodejs.svg)Node](/docs/advanced/proxy/node.md)
+- [![](https://res.cloudinary.com/dmukukwp6/image/upload/posthog.com/contents/images/docs/integrate/nodejs.svg)Node](/docs/advanced/proxy/node.md)
 
--   [![](https://res.cloudinary.com/dmukukwp6/image/upload/posthog.com/contents/images/docs/integrate/frameworks/nuxt.svg)Nuxt](/docs/advanced/proxy/nuxt.md)
+- [![](https://res.cloudinary.com/dmukukwp6/image/upload/posthog.com/contents/images/docs/integrate/frameworks/nuxt.svg)Nuxt](/docs/advanced/proxy/nuxt.md)
 
--   [![](https://res.cloudinary.com/dmukukwp6/image/upload/Cloud_Front_76c0f62ab5.svg)Pomerium](/docs/advanced/proxy/pomerium.md)
+- [![](https://res.cloudinary.com/dmukukwp6/image/upload/Cloud_Front_76c0f62ab5.svg)Pomerium](/docs/advanced/proxy/pomerium.md)
 
--   [![](https://res.cloudinary.com/dmukukwp6/image/upload/logo_dark_f8e870867f.svg)Railway](/docs/advanced/proxy/railway.md)
+- [![](https://res.cloudinary.com/dmukukwp6/image/upload/logo_dark_f8e870867f.svg)Railway](/docs/advanced/proxy/railway.md)
 
--   [![](https://res.cloudinary.com/dmukukwp6/image/upload/remix_letter_glowing_49183adce2.svg)Remix](/docs/advanced/proxy/remix.md)
+- [![](https://res.cloudinary.com/dmukukwp6/image/upload/remix_letter_glowing_49183adce2.svg)Remix](/docs/advanced/proxy/remix.md)
 
--   [![](https://res.cloudinary.com/dmukukwp6/image/upload/posthog.com/contents/docs/integrate/frameworks/svelte.svg)SvelteKit](/docs/advanced/proxy/sveltekit.md)
+- [![](https://res.cloudinary.com/dmukukwp6/image/upload/posthog.com/contents/docs/integrate/frameworks/svelte.svg)SvelteKit](/docs/advanced/proxy/sveltekit.md)
 
--   [![](https://res.cloudinary.com/dmukukwp6/image/upload/vercel_icon_svgrepo_com_b7e78b41f9.svg)Vercel](/docs/advanced/proxy/vercel.md)
+- [![](https://res.cloudinary.com/dmukukwp6/image/upload/vercel_icon_svgrepo_com_b7e78b41f9.svg)Vercel](/docs/advanced/proxy/vercel.md)
 
 ### Find the right self-hosted option
 

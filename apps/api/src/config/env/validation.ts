@@ -9,7 +9,7 @@ export enum ENodeEnv {
 export const envSchema = z.object({
   NODE_ENV: z.enum(ENodeEnv).default(ENodeEnv.DEV),
 
-  PORT: z.coerce.number().int().positive().max(65535).default(8080),
+  PORT: z.coerce.number().int().positive().max(65535).default(4000),
 
   CORS_ALLOWED_ORIGINS: z
     .string()

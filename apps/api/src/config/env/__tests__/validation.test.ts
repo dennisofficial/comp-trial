@@ -13,8 +13,8 @@ type _OriginsAreStringArray = Expect<Equals<IEnvConfig['CORS_ALLOWED_ORIGINS'], 
 type _DatabaseUrlIsString = Expect<Equals<IEnvConfig['DATABASE_URL'], string>>;
 
 describe('validateEnv', () => {
-  it('defaults PORT to 8080 when the platform does not set one', () => {
-    expect(validateEnv({ ...BASE }).PORT).toBe(8080);
+  it('defaults PORT to the local 4000 when the platform does not set one', () => {
+    expect(validateEnv({ ...BASE }).PORT).toBe(4000);
   });
 
   it('coerces PORT from the string the platform actually injects', () => {

@@ -1,9 +1,13 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    // node16, not commonjs/node: classic resolution predates `exports` maps, so a package that
+    // only exposes a subpath through `exports` (posthog-node/nestjs) is unresolvable and the deep
+    // path that *does* typecheck throws ERR_PACKAGE_PATH_NOT_EXPORTED under real Node at boot.
+    // The package is CJS (no `"type"` field), so node16 still emits CommonJS for Nest.
+    "module": "node16",
     "target": "ES2023",
     "lib": ["ES2023"],
-    "moduleResolution": "node",
+    "moduleResolution": "node16",
     "declaration": false,
     "removeComments": true,
     "emitDecoratorMetadata": true,

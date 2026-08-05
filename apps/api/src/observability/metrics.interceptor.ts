@@ -1,6 +1,7 @@
 import {
   type CallHandler,
   type ExecutionContext,
+  HttpException,
   Injectable,
   type NestInterceptor,
 } from '@nestjs/common';
@@ -19,7 +20,7 @@ export class MetricsInterceptor implements NestInterceptor {
     const response = http.getResponse<Response>();
     const startedAt = performance.now();
 
-    const route = request.route?.path ?? 'unmatched';
+    const route = this.resolveRoutePath(request);
     const method = request.method;
 
     const record = (status: number): void => {
@@ -35,21 +36,27 @@ export class MetricsInterceptor implements NestInterceptor {
     return next.handle().pipe(
       tap({
         next: () => record(response.statusCode),
-        error: (error: unknown) => record(resolveErrorStatus(error)),
+        error: (error: unknown) => record(this.resolveErrorStatus(error)),
       }),
     );
   }
-}
 
-function resolveErrorStatus(error: unknown): number {
-  if (typeof error !== 'object' || error === null) return 500;
+  private resolveRoutePath(request: Request): string {
+    const route: unknown = request.route;
 
-  if ('getStatus' in error && typeof error.getStatus === 'function') {
-    const status: unknown = error.getStatus();
-    if (typeof status === 'number') return status;
+    if (typeof route !== 'object' || route === null) return 'unmatched';
+    if (!('path' in route) || typeof route.path !== 'string') return 'unmatched';
+
+    return route.path;
   }
 
-  if ('status' in error && typeof error.status === 'number') return error.status;
+  private resolveErrorStatus(error: unknown): number {
+    if (error instanceof HttpException) return error.getStatus();
 
-  return 500;
+    if (typeof error === 'object' && error !== null) {
+      if ('status' in error && typeof error.status === 'number') return error.status;
+    }
+
+    return 500;
+  }
 }
