@@ -3,9 +3,11 @@
 Full-stack app for the Comp AI work trial. Turborepo · Bun · Next.js 16 · NestJS 11 · Prisma 7 ·
 Postgres (Neon). The web app deploys to Vercel, the API to DigitalOcean App Platform.
 
-**Web:** https://comp-trial.dennislysenko.com **API:** `api.dennislysenko.com` — deployed and
-healthy, but the DNS record does not exist yet, so nothing resolves. See
-[Known gap](#known-gap-the-api-has-no-dns-record).
+**Web:** https://comp-trial.dennislysenko.com · **API:**
+[`/v1/health`](https://comp-api.dennislysenko.com/v1/health) ·
+[docs](https://comp-api.dennislysenko.com/api/docs)
+
+The health check is a real database round-trip, so a 200 there means a reachable database.
 
 ## Shape of it
 
@@ -213,11 +215,12 @@ resolved relative to the repo root and would double up.
 App `comp-trial-api`, region `nyc`, one `basic-xxs` instance, built from `apps/api/Dockerfile` with
 the repo root as build context. Deploy-on-push from `main` — there is no deploy step in CI.
 
-| Setting      | Value                                                                 |
-| ------------ | --------------------------------------------------------------------- |
-| `http_port`  | 8080 — must equal `ENV PORT` in the Dockerfile                        |
-| Health check | `/v1/health`                                                          |
-| Runtime env  | `NODE_ENV`, `CORS_ALLOWED_ORIGINS`, `DATABASE_URL` (encrypted secret) |
+| Setting      | Value                                                                    |
+| ------------ | ------------------------------------------------------------------------ |
+| Domain       | `comp-api.dennislysenko.com` → `comp-trial-api-hi8x2.ondigitalocean.app` |
+| `http_port`  | 8080 — must equal `ENV PORT` in the Dockerfile                           |
+| Health check | `/v1/health`                                                             |
+| Runtime env  | `NODE_ENV`, `CORS_ALLOWED_ORIGINS`, `DATABASE_URL` (encrypted secret)    |
 
 The health check is a real database round-trip: `SELECT 1` through Prisma, 503 on failure. A green
 instance therefore means a reachable database, which is why it is the App Platform probe and not a
@@ -228,7 +231,10 @@ schema's 4000 default is local dev only and is never reached in the container. A
 dotenv file is how you get a healthy container on a port nothing routes to.
 
 `SENTRY_DSN` is not currently set on the app, so the API's Sentry integration is a no-op in
-production.
+production. The value it wants is the DSN of the **`comp-trial-api`** Sentry project — not the web
+app's, which reports to `javascript-nextjs`. Add it as a plain `RUN_TIME` variable, not a `SECRET`:
+a DSN is an ingest identifier, not a credential, and the web half of the same pair already ships
+inside the browser bundle.
 
 ### Database
 
@@ -238,13 +244,6 @@ advisory locks need it.
 
 Migrations are applied deliberately with `prisma migrate deploy`, never from a build — a build that
 migrates turns every rollback into a data problem.
-
-## Known gap: the API has no DNS record
-
-`api.dennislysenko.com` is the App Platform app's primary domain and the service behind it is
-healthy, but the name is `NXDOMAIN` — the Cloudflare record was never recreated after `3a993d1`
-removed the Terraform that owned DNS. Until it exists, the deployed web app cannot reach the
-deployed API; local development is unaffected.
 
 ## Agent tooling
 
