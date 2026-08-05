@@ -97,8 +97,8 @@ comparison scoped to one side, for running locally.
   schema. **Insert the key into the `.enc` manually at the right line first, then `dotenvx set`** —
   `set` on an unknown key appends to the bottom and breaks alignment.
 - **Never put a port in a dotenv file.** Local dev uses the API's schema default (4000) and Next's
-  own (3000); deployment uses the container (`ENV PORT` in the Dockerfile, `http_port` in the DO
-  terraform). A dotenv entry is a third source able to disagree, and the symptom is a healthy
+  own (3000); deployment uses the container (`ENV PORT` in the Dockerfile, `http_port` in the App
+  Platform app spec). A dotenv entry is a third source able to disagree, and the symptom is a healthy
   container on a port nothing routes to. If 3000 or 4000 is occupied locally, free it — letting
   Next auto-increment produces the CORS mismatch below.
 - **Never set `NODE_ENV` in a dotenv file.**

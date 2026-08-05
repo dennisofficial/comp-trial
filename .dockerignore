@@ -13,8 +13,8 @@ dist
 coverage
 **/coverage
 
-# Never ship secrets or terraform state into a build context. Encrypted `.enc` files
-# are allowed back in — they are useless without a private key, which is not.
+# Never ship secrets into a build context. Encrypted `.enc` files are allowed back in —
+# they are useless without a private key, which is not.
 .env
 .env.*
 !.env.example
@@ -24,5 +24,3 @@ coverage
 **/.env.keys
 **/.env.personal
 **/.env.local
-infra/**/.terraform
-infra/**/*.tfstate*

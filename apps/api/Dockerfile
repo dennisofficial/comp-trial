@@ -30,9 +30,8 @@ COPY --from=builder --chown=node:node /app/packages/db ./packages/db
 
 USER node
 
-# The container owns the deployed port, and this must agree with `http_port` in
-# infra/terraform/.../digitalocean.tf. The env schema's 4000 default is for local dev only
-# and is never reached here.
+# The container owns the deployed port, and this must agree with `http_port` in the
+# App Platform app spec. The env schema's 4000 default is local dev only, never reached here.
 ENV PORT=8080
 EXPOSE 8080
 
